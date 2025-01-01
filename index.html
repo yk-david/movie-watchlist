@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Watchlist</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <li>
+          <a href="" class="make-menu-selected menu" id="find-film-btn"
+            >Find your film</a
+          >
+        </li>
+        <li>
+          <a href="" class="menu" id="watchlist-btn">My Watchlist</a>
+        </li>
+      </nav>
+      <div class="background"></div>
+    </header>
+
+    <main id="search">
+      <form>
+        <input type="text" id="search-input" placeholder="Search for a movie" />
+        <button id="search-btn" type="submit">Search</button>
+      </form>
+      <div class="space"></div>
+
+      <div class="movie-container">
+        <label class="default" for="search-input">
+          <img src="img/explore.png" alt="" class="exploring" />
+          <h3>Start exploring</h3>
+        </label>
+      </div>
+    </main>
+    <div id="watchlist" class="invisible">
+      <div class="default">
+        <h3>Your watchlist is looking a little empty...</h3>
+        <a>+ Let's add some movies!</a>
+      </div>
+    </div>
+
+    <!-- TEST ONLY -->
+    <!-- <button onclick="logTestResult(getMovieId())">Run Test</button> -->
+    <script src="script.js"></script>
+  </body>
+</html>
