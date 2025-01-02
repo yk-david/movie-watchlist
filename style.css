@@ -1,6 +1,5 @@
 body {
   width: 550px;
-  /* height: 800px; */
   margin: 0 auto;
   font-family: "Inter", sans-serif;
 }
@@ -107,6 +106,11 @@ form {
   scale: 0.98;
 }
 
+/* =============
+Movie container Section
+===============*/
+
+
 .default {
   display: flex;
   flex-direction: column;
@@ -127,6 +131,10 @@ form {
   color: #dfdddd;
   margin-top: 0;
 }
+
+/* =====
+Watchlist Section
+=======*/
 
 /* Movie Api Data */
 .movie {
@@ -227,4 +235,12 @@ form {
 
 .invisible {
   display: none;
+}
+
+#search-error-message {
+  width: 75%;
+  color: #DFDDDD;
+  font-size: 1.5rem;
+  margin: 0 auto;
+  margin-top: 50%; 
 }

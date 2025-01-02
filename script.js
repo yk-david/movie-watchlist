@@ -4,9 +4,7 @@ const searchBtn = document.getElementById("search-btn");
 const findFilmBtn = document.getElementById('find-film-btn');
 const watchlistBtn = document.getElementById('watchlist-btn');
 const navEl = document.querySelector('nav');
-const pageUrl = window.location.href;
 let movieWatchlist = [];
-
 
 
 // Search Event
@@ -15,21 +13,15 @@ document.querySelector("form").addEventListener("submit", (e) => {
   // Reset if any movie result from previous search
   resetMovie();
   getMovieWithId();
-  searchEl.value = "";
-
-  // Once movies rendered
-  
 });
 
 // Menu click Event
 navEl.addEventListener('click', e => {
   e.preventDefault();
-  console.log(e.target.id);
-  
-  // 🚨 DETECTING id area is too generous!! Clicking on other than btn shouldn't work!! 🚨 
+   
   if (e.target.id === 'watchlist-btn') {
     showWatchlist();
-  } else {
+  } else if (e.target.id === 'find-film-btn') {
     showSearch();
   }
 })
@@ -61,7 +53,15 @@ async function getMovieId() {
   );
   const movie = await response.json();
   const movieArr = movie.Search;
-  return movieArr.map((movie) => movie.imdbID);
+
+  if (movie.Response === 'True') {
+    // console.log(movie.Response);
+    return movieArr.map((movie) => movie.imdbID);
+  } else if (movie.Response === 'False') {
+    // console.log(movie.Response);
+    // console.log(document.querySelector('.movie-container'));
+    return [];  
+  }
 }
 
 async function getMovieWithId() {
@@ -69,11 +69,17 @@ async function getMovieWithId() {
   
   document.querySelector(".movie-container").innerHTML = "";
 
-  for (let id of movieIdArr) {
-    const response = await fetch(`https://www.omdbapi.com/?apikey=${myApiKey}&i=${id}`);
-    const movie = await response.json();
-    
-    document.querySelector(".movie-container").innerHTML += renderMovieHTML(movie);
+  // If only movieIdArr isn't empty
+  if (movieIdArr.length !== 0) {
+    for (let id of movieIdArr) {
+      const response = await fetch(`https://www.omdbapi.com/?apikey=${myApiKey}&i=${id}`);
+      const movie = await response.json();
+      
+      document.querySelector(".movie-container").innerHTML += renderMovieHTML(movie);
+    }
+  } else {
+    document.querySelector('.movie-container').innerHTML = `
+      <p id='search-error-message'>Unable to find what you're looking for. Please try another search.</p>`
   }
 
 }
@@ -119,54 +125,16 @@ function renderWatchlistMovieHTML(movie) {
 }
 
 function resetMovie() {
-  document.getElementById("search").innerHTML = `
-    <form>
-      <input type="text" id="search-input" placeholder="Search for a movie" />
-      <button id="search-btn" type="submit">Search</button>
-    </form>
-    <div class="space"></div>
+  document.querySelector(".movie-container").innerHTML = `
+  <div class="movie-container">
+    <label class="default" for="search-input">
+      <img src="img/explore.png" alt="" class="exploring" />
+      <h3>Start exploring</h3>
+    </label>
+  </div>
+`;
 
-    <div class="movie-container">
-      <label class="default" for="search-input">
-        <img src="img/explore.png" alt="" class="exploring" />
-        <h3>Start exploring</h3>
-      </label>
-    </div>
-  `;
-}
 
-function renderSearchHTML() {
-  document.body.innerHTML = `
-    <header>
-      <nav>
-        <li>
-          <a href="#" class="make-menu-selected menu" id="find-film-btn"
-            >Find your film</a
-          >
-        </li>
-        <li>
-          <a href="#" class="menu" id="watchlist-btn">My Watchlist</a>
-        </li>
-      </nav>
-      <div class="background"></div>
-    </header>
-
-    <main>
-      <form>
-        <input type="text" id="search-input" placeholder="Search for a movie" />
-        <button id="search-btn" type="submit">Search</button>
-      </form>
-      <div class="space"></div>
-
-      <div class="movie-container">
-        <label class="default" for="search-input">
-          <img src="img/explore.png" alt="" class="exploring" />
-          <h3>Start exploring</h3>
-        </label>
-      </div>
-    </main>
-    <script src='script.js'></script>
-  `
 }
 
 function saveMovieInWatchlist(movieId) {
@@ -177,8 +145,6 @@ function saveMovieInWatchlist(movieId) {
   } else {
     console.log('‼️This movie is already in the watchlist!');
   }
-  // ❓If movie added, change textContent of its button to ✅
-
 }
 
 function removeMovieFromWatchlist(movieId) {
@@ -196,7 +162,7 @@ async function renderMoviesinWatchlist() {
     document.getElementById('watchlist').innerHTML += renderWatchlistMovieHTML(movie);
   }
 
-  if (movieWatchlist.length === 0) {
+  if (movieWatchlist.length === 0) { // Search redirection purpose
     document.getElementById('watchlist').innerHTML = `
       <div class="default">
         <h3>Your watchlist is looking a little empty...</h3>
@@ -207,7 +173,3 @@ async function renderMoviesinWatchlist() {
 
 } 
 
-// TEST ONLY
-function logTestResult(fn) {
-  console.log(fn);
-}
